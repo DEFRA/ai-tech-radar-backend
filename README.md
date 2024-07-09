@@ -22,6 +22,7 @@ Core delivery platform Node.js Backend Template.
 
 ## Requirements
 
+
 ### Node.js
 
 Please install [Node.js](http://nodejs.org/) `>= v18` and [npm](https://nodejs.org/) `>= v9`. You will find it
