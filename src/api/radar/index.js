@@ -43,13 +43,12 @@ const radar = {
             validate: {
               payload: Joi.object({
                 description: Joi.string().required(),
-                quadrant: Joi.string()
-                  .valid(
-                    'techniques',
-                    'tools',
-                    'platforms',
-                    'languages-and-frameworks'
-                  ),
+                quadrant: Joi.string().valid(
+                  'techniques',
+                  'tools',
+                  'platforms',
+                  'languages-and-frameworks'
+                ),
                 ring: Joi.string().valid('adopt', 'trial', 'assess', 'hold')
               })
             }

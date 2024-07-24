@@ -1,11 +1,11 @@
-import { ObjectId } from "mongodb"
-import { RadarHistoryItem, RadarItem } from "../models/radar-item.js"
+import { ObjectId } from 'mongodb'
+import { RadarHistoryItem, RadarItem } from '../models/radar-item.js'
 
 const radarCollection = 'radar-items'
 
 function createInsert(item) {
   const now = new Date()
-  
+
   return {
     ...item,
     createdAt: item.createdAt ?? now,
@@ -38,14 +38,13 @@ async function getRadarItemById(db, id) {
   const radar = db.collection(radarCollection)
 
   const query = {
-    '_id': new ObjectId.createFromHexString(id)
+    _id: new ObjectId.createFromHexString(id)
   }
 
   let item
 
   try {
     item = await radar.findOne(query)
-
   } catch (err) {
     throw new Error('Failed to get radar item: ', err)
   }
@@ -77,13 +76,13 @@ async function getRadarItems(db, query) {
   }
 }
 
-async function updateRadarItem(db, id, fields) {
+async function updateRadarItem(db, id, update) {
   const curr = await getRadarItemById(db, id)
 
   const fields = ['description', 'quadrant', 'ring']
 
   const unchanged = fields.every((f) => {
-    return !fields[f] || curr[f] === fields[f]
+    return !update[f] || curr[f] === update[f]
   })
 
   if (unchanged) {
@@ -99,9 +98,9 @@ async function updateRadarItem(db, id, fields) {
     updatedAt
   )
 
-  const update = {
+  const updateQuery = {
     $set: {
-      ...fields,
+      ...update,
       updatedAt
     },
     $push: {
@@ -115,10 +114,10 @@ async function updateRadarItem(db, id, fields) {
     const radar = db.collection(radarCollection)
 
     const query = {
-      '_id': new ObjectId.createFromHexString(id)
+      _id: new ObjectId.createFromHexString(id)
     }
 
-    const result = await radar.updateOne(query, update)
+    const result = await radar.updateOne(query, updateQuery)
 
     return result
   } catch (err) {
