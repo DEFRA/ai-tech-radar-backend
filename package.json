@@ -1,6 +1,6 @@
 {
   "name": "ai-tech-radar-backend",
-  "version": "0.0.0",
+  "version": "0.1.1",
   "description": "CDP Backend Template",
   "main": ".server/index.js",
   "type": "module",
