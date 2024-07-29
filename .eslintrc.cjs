@@ -51,7 +51,8 @@ module.exports = {
     'n/no-extraneous-require': 'off',
     'n/no-extraneous-import': 'off',
     'n/no-missing-require': 'off',
-    'n/no-missing-import': 'off'
+    'n/no-missing-import': 'off',
+    'new-cap': 'off'
   },
   settings: {
     'import/resolver': {
