@@ -1,0 +1,8 @@
+
+services:
+  ai-tech-radar-backend:
+    command: npm run start:debug
+
+networks:
+  ai-tech-radar:
+    driver: bridge

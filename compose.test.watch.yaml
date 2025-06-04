@@ -1,0 +1,3 @@
+services:
+  ai-tech-radar-backend:
+    command: npm run test:watch

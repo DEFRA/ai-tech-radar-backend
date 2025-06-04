@@ -1,0 +1,43 @@
+services:
+  ai-tech-radar-backend:
+    build:
+      target: development
+    image: ai-tech-radar-backend-development
+    container_name: ai-tech-radar-backend-development
+    ports:
+      - '3000:3000'
+      - '9232:9232'
+    links:
+      - 'mongodb:mongodb'
+    depends_on:
+      mongodb:
+        condition: service_started
+    volumes:
+      - ./src/:/home/node/src
+      - ./package.json:/home/node/package.json
+    env_file:
+      - .env
+    environment:
+      PORT: 3000
+      PORT_DEBUG: 9232
+      NODE_ENV: development
+      MONGO_URI: mongodb://mongodb:27017/
+    networks:
+      - ai-tech-radar
+
+  mongodb:
+    image: mongo:6.0.13
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongodb-data:/data
+    networks:
+      - ai-tech-radar
+
+volumes:
+  mongodb-data:
+
+networks:
+  ai-tech-radar:
+    driver: bridge
+
