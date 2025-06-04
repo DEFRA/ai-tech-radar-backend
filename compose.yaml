@@ -39,5 +39,6 @@ volumes:
 
 networks:
   ai-tech-radar:
+    name: ai-tech-radar
     driver: bridge
 

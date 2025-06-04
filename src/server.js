@@ -10,7 +10,7 @@ import { setupProxy } from './api/common/helpers/proxy/setup-proxy.js'
 
 import probeRouter from './api/probes/router.js'
 
-const createServer = async () => {
+async function createServer() {
   setupProxy()
 
   const server = hapi.server({

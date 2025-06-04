@@ -4,8 +4,10 @@ import { loggerOptions } from './logger-options.js'
 
 const logger = pino(loggerOptions)
 
-const createLogger = () => {
+function createLogger() {
   return logger
 }
 
-export { createLogger }
+export {
+  createLogger
+}

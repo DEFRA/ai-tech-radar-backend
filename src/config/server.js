@@ -8,7 +8,7 @@ const isProduction = process.env.NODE_ENV === environments.PRODUCTION
 const isDev = process.env.NODE_ENV === environments.DEVELOPMENT
 const isTest = process.env.NODE_ENV === environments.TEST
 
-export const serverConfig = {
+const serverConfig = {
   serviceVersion: {
     doc: 'The service version, this variable is injected into your docker container in CDP environments',
     format: String,
@@ -121,4 +121,8 @@ export const serverConfig = {
       env: 'TRACING_HEADER'
     }
   }
+}
+
+export {
+  serverConfig
 }

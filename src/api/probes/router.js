@@ -3,7 +3,7 @@ import { health } from './health.js'
 const router = {
   plugin: {
     name: 'probes',
-    register: async (server) => {
+    async register (server) {
       server.route([
         ...health
       ])
