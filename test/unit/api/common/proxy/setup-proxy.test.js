@@ -1,5 +1,5 @@
 import { ProxyAgent, getGlobalDispatcher } from 'undici'
-import { afterEach, beforeEach, describe, expect, test } from 'vitest'
+import { afterEach, describe, expect, test } from 'vitest'
 
 import { setupProxy } from '../../../../../src/common/proxy/setup-proxy.js'
 import { config } from '../../../../../src/config/index.js'
@@ -11,7 +11,7 @@ describe('setupProxy', () => {
 
   describe('given the proxy environment variable is not set', () => {
     describe('when proxy setup is attempted', () => {
-      beforeEach(() => {
+      beforeAll(() => {
         config.set('httpProxy', null)
       })
 
@@ -30,15 +30,17 @@ describe('setupProxy', () => {
 
   describe('given the proxy environment variable is set', () => {
     describe('when proxy setup is attempted', () => {
-      test('then GLOBAL_AGENT.HTTP_PROXY should be set to the proxy URL', () => {
+      beforeAll(() => {
         config.set('httpProxy', 'http://localhost:8080')
+      })
+
+      test('then GLOBAL_AGENT.HTTP_PROXY should be set to the proxy URL', () => {
         setupProxy()
 
         expect(global?.GLOBAL_AGENT?.HTTP_PROXY).toBe('http://localhost:8080')
       })
 
       test('then undici dispatcher should be an instance of ProxyAgent', () => {
-        config.set('httpProxy', 'http://localhost:8080')
         setupProxy()
 
         const undiciDispatcher = getGlobalDispatcher()

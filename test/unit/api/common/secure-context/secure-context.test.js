@@ -34,16 +34,18 @@ describe('secure context', () => {
       secureContext = await import('../../../../../src/common/secure-context/secure-context.js')
     })
 
-    test('then getSecureContext() should return null', () => {
-      expect(secureContext.getSecureContext()).toBeNull()
-    })
+    describe('when secure context load is attempted', () => {
+      test('then getSecureContext() should return null', () => {
+        expect(secureContext.getSecureContext()).toBeNull()
+      })
 
-    test('then getSecureContext() should log a disabled message', () => {
-      secureContext.getSecureContext()
+      test('then getSecureContext() should log a disabled message', () => {
+        secureContext.getSecureContext()
 
-      expect(mockLogger.info).toHaveBeenCalledWith(
-        'Custom secure context is disabled'
-      )
+        expect(mockLogger.info).toHaveBeenCalledWith(
+          'Custom secure context is disabled'
+        )
+      })
     })
 
     afterAll(() => {
