@@ -1,5 +1,5 @@
 import { ProxyAgent, getGlobalDispatcher } from 'undici'
-import { afterEach, describe, expect, test } from 'vitest'
+import { afterEach, beforeEach, describe, expect, test } from 'vitest'
 
 import { setupProxy } from '../../../../../src/common/proxy/setup-proxy.js'
 import { config } from '../../../../../src/config/index.js'
@@ -9,22 +9,41 @@ describe('setupProxy', () => {
     config.set('httpProxy', null)
   })
 
-  test('Should not setup proxy if the environment variable is not set', () => {
-    config.set('httpProxy', null)
-    setupProxy()
+  describe('given the proxy environment variable is not set', () => {
+    describe('when proxy setup is attempted', () => {
+      beforeEach(() => {
+        config.set('httpProxy', null)
+      })
 
-    expect(global?.GLOBAL_AGENT?.HTTP_PROXY).toBeUndefined()
+      test('then GLOBAL_AGENT.HTTP_PROXY should be undefined', () => {
+        setupProxy()
 
-    const undiciDispatcher = getGlobalDispatcher()
+        expect(global?.GLOBAL_AGENT?.HTTP_PROXY).toBeUndefined()
+      })
 
-    expect(undiciDispatcher).not.toBeInstanceOf(ProxyAgent)
+      test('then undici dispatcher should not be an instance of ProxyAgent', () => {
+        const undiciDispatcher = getGlobalDispatcher()
+        expect(undiciDispatcher).not.toBeInstanceOf(ProxyAgent)
+      })
+    })
   })
 
-  test('Should setup proxy if the environment variable is set', () => {
-    config.set('httpProxy', 'http://localhost:8080')
-    setupProxy()
-    expect(global?.GLOBAL_AGENT?.HTTP_PROXY).toBe('http://localhost:8080')
-    const undiciDispatcher = getGlobalDispatcher()
-    expect(undiciDispatcher).toBeInstanceOf(ProxyAgent)
+  describe('given the proxy environment variable is set', () => {
+    describe('when proxy setup is attempted', () => {
+      test('then GLOBAL_AGENT.HTTP_PROXY should be set to the proxy URL', () => {
+        config.set('httpProxy', 'http://localhost:8080')
+        setupProxy()
+
+        expect(global?.GLOBAL_AGENT?.HTTP_PROXY).toBe('http://localhost:8080')
+      })
+
+      test('then undici dispatcher should be an instance of ProxyAgent', () => {
+        config.set('httpProxy', 'http://localhost:8080')
+        setupProxy()
+
+        const undiciDispatcher = getGlobalDispatcher()
+        expect(undiciDispatcher).toBeInstanceOf(ProxyAgent)
+      })
+    })
   })
 })

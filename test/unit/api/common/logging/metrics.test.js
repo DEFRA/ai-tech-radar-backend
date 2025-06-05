@@ -33,66 +33,84 @@ const defaultMetricsValue = 1
 const mockValue = 200
 
 describe('metrics', () => {
-  describe('When metrics is not enabled', () => {
-    beforeEach(async () => {
+  describe('given metrics is not enabled', () => {
+    beforeEach(() => {
       config.set('isMetricsEnabled', false)
-      await metricsCounter(mockMetricsName, mockValue)
     })
 
-    test('Should not call metric', () => {
-      expect(mockMetricsLogger.putMetric).not.toHaveBeenCalled()
-    })
+    describe('when metricsCounter() is called', () => {
+      beforeEach(async () => {
+        vi.clearAllMocks()
+      })
 
-    test('Should not call flush', () => {
-      expect(mockMetricsLogger.flush).not.toHaveBeenCalled()
+      test('createMetricsLogger should not be called', async () => {
+        await metricsCounter(mockMetricsName, mockValue)
+
+        expect(createMetricsLogger).not.toHaveBeenCalled()
+      })
+
+      test('then logger should not be called', async () => {
+        await metricsCounter(mockMetricsName, mockValue)
+
+        expect(mockLogger.error).not.toHaveBeenCalled()
+      })
     })
   })
 
-  describe('When metrics is enabled', () => {
+  describe('given metrics is enabled', () => {
     beforeEach(() => {
       config.set('isMetricsEnabled', true)
     })
 
-    test('Should send metric with default value', async () => {
-      await metricsCounter(mockMetricsName)
+    describe('when metricsCounter() is called without value', () => {
+      beforeEach(() => {
+        vi.clearAllMocks()
+      })
 
-      expect(mockMetricsLogger.putMetric).toHaveBeenCalledWith(
-        mockMetricsName,
-        defaultMetricsValue,
-        Unit.Count,
-        StorageResolution.Standard
-      )
+      test('then metric should be sent with default value', async () => {
+        await metricsCounter(mockMetricsName)
+
+        expect(mockMetricsLogger.putMetric).toHaveBeenCalledWith(
+          mockMetricsName,
+          defaultMetricsValue,
+          Unit.Count,
+          StorageResolution.Standard
+        )
+      })
     })
 
-    test('Should send metric', async () => {
-      await metricsCounter(mockMetricsName, mockValue)
+    describe('when metricsCounter() is called with value', () => {
+      beforeEach(() => {
+        vi.clearAllMocks()
+      })
 
-      expect(mockMetricsLogger.putMetric).toHaveBeenCalledWith(
-        mockMetricsName,
-        mockValue,
-        Unit.Count,
-        StorageResolution.Standard
-      )
+      test('then metric should be sent with provided value', async () => {
+        await metricsCounter(mockMetricsName, mockValue)
+
+        expect(mockMetricsLogger.putMetric).toHaveBeenCalledWith(
+          mockMetricsName,
+          mockValue,
+          Unit.Count,
+          StorageResolution.Standard
+        )
+      })
     })
 
-    test('Should not call flush', async () => {
-      await metricsCounter(mockMetricsName, mockValue)
-      expect(mockMetricsLogger.flush).toHaveBeenCalled()
-    })
-  })
+    describe('when metricsCounter() throws', () => {
+      const mockError = 'mock-metrics-put-error'
 
-  describe('When metrics throws', () => {
-    const mockError = 'mock-metrics-put-error'
+      beforeEach(() => {
+        vi.clearAllMocks()
+        mockMetricsLogger.putMetric.mockImplementation(() => {
+          throw new Error(mockError)
+        })
+      })
 
-    beforeEach(async () => {
-      config.set('isMetricsEnabled', true)
-      mockMetricsLogger.flush.mockRejectedValue(new Error(mockError))
+      test('then logger should log the error', async () => {
+        await metricsCounter(mockMetricsName, mockValue)
 
-      await metricsCounter(mockMetricsName, mockValue)
-    })
-
-    test('Should log expected error', () => {
-      expect(mockLogger.error).toHaveBeenCalledWith(Error(mockError), mockError)
+        expect(mockLogger.error).toHaveBeenCalledWith(Error(mockError), mockError)
+      })
     })
   })
 })
