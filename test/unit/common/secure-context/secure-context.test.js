@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest'
 
-import { createLogger } from '../../../../../src/common/logging/logger.js'
+import { createLogger } from '../../../../src/common/logging/logger.js'
 
 import tls from 'node:tls'
 
@@ -10,7 +10,7 @@ const mockTlsCreateSecureContext = {
   }
 }
 
-vi.mock('../../../../../src/common/logging/logger.js', () => ({
+vi.mock('../../../../src/common/logging/logger.js', () => ({
   createLogger: vi.fn().mockReturnValue({
     info: vi.fn(),
     warn: vi.fn(),
@@ -31,7 +31,7 @@ describe('secure context', () => {
 
       process.env.ENABLE_SECURE_CONTEXT = 'false'
 
-      secureContext = await import('../../../../../src/common/secure-context/secure-context.js')
+      secureContext = await import('../../../../src/common/secure-context/secure-context.js')
     })
 
     describe('when secure context load is attempted', () => {
@@ -60,7 +60,7 @@ describe('secure context', () => {
     let createSecureContextSpy
 
     beforeAll(async () => {
-      secureContext = await import('../../../../../src/common/secure-context/secure-context.js')
+      secureContext = await import('../../../../src/common/secure-context/secure-context.js')
 
       createSecureContextSpy = vi.spyOn(tls, 'createSecureContext')
         .mockReturnValue(mockTlsCreateSecureContext)
@@ -73,7 +73,7 @@ describe('secure context', () => {
         process.env.ENABLE_SECURE_CONTEXT = 'true'
         process.env.TRUSTSTORE_ONE = 'LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCm1vY2stY2VydC1kb3JpcwotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg=='
 
-        secureContext = await import('../../../../../src/common/secure-context/secure-context.js')
+        secureContext = await import('../../../../src/common/secure-context/secure-context.js')
       })
 
       test('then addCACert should be called once', () => {
@@ -95,7 +95,7 @@ describe('secure context', () => {
         process.env.TRUSTSTORE_ONE = 'LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCm1vY2stY2VydC1kb3JpcwotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg=='
         process.env.TRUSTSTORE_TWO = 'LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCm1vY2stY2VydC1hbGljZQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg=='
 
-        secureContext = await import('../../../../../src/common/secure-context/secure-context.js')
+        secureContext = await import('../../../../src/common/secure-context/secure-context.js')
       })
 
       test('then addCACert should be called for each cert', () => {
@@ -116,7 +116,7 @@ describe('secure context', () => {
 
         process.env.ENABLE_SECURE_CONTEXT = 'true'
 
-        secureContext = await import('../../../../../src/common/secure-context/secure-context.js')
+        secureContext = await import('../../../../src/common/secure-context/secure-context.js')
       })
 
       test('then getSecureContext() should log a warning', () => {
