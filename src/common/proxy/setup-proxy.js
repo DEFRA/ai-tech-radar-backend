@@ -1,12 +1,12 @@
-import { ProxyAgent, setGlobalDispatcher } from 'undici'
 import { bootstrap } from 'global-agent'
+import { ProxyAgent, setGlobalDispatcher } from 'undici'
 
-import { createLogger } from '../../../../logging/logger.js'
-import { config } from '../../../../config/index.js'
+import { config } from '../../config/index.js'
+import { createLogger } from '../logging/logger.js'
 
 const logger = createLogger()
 
-async function setupProxy() {
+async function setupProxy () {
   const proxyUrl = config.get('httpProxy')
 
   if (proxyUrl) {

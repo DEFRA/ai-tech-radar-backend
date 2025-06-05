@@ -1,8 +1,8 @@
-import { describe, test, expect, afterEach } from 'vitest'
+import { ProxyAgent, getGlobalDispatcher } from 'undici'
+import { afterEach, describe, expect, test } from 'vitest'
 
-import { config } from '../../../../../../src/config/index.js'
-import { setupProxy } from '../../../../../../src/api/common/helpers/proxy/setup-proxy.js'
-import { getGlobalDispatcher, ProxyAgent } from 'undici'
+import { setupProxy } from '../../../../../src/common/proxy/setup-proxy.js'
+import { config } from '../../../../../src/config/index.js'
 
 describe('setupProxy', () => {
   afterEach(() => {

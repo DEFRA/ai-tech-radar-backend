@@ -1,11 +1,11 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+
 import environments from '../constants/environments.js'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const isProduction = process.env.NODE_ENV === environments.PRODUCTION
-const isDev = process.env.NODE_ENV === environments.DEVELOPMENT
 const isTest = process.env.NODE_ENV === environments.TEST
 
 const serverConfig = {
@@ -37,21 +37,6 @@ const serverConfig = {
     doc: 'Project root',
     format: String,
     default: path.resolve(dirname, '../..')
-  },
-  cdpEnvironment: {
-    doc: 'The CDP environment the app is running in. With the addition of "local" for local development',
-    format: [
-      'local',
-      'infra-dev',
-      'management',
-      'dev',
-      'test',
-      'perf-test',
-      'ext-test',
-      'prod'
-    ],
-    default: 'local',
-    env: 'ENVIRONMENT'
   },
   log: {
     isEnabled: {

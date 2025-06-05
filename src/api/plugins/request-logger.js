@@ -1,10 +1,12 @@
 import hapiPino from 'hapi-pino'
 
-import { loggerOptions } from './logger-options.js'
+import { loggerOptions } from '../../common/logging/logger-options.js'
 
 const requestLogger = {
   plugin: hapiPino,
   options: loggerOptions
 }
 
-export { requestLogger }
+export {
+  requestLogger
+}

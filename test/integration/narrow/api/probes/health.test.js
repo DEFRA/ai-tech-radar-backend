@@ -1,29 +1,35 @@
-import { beforeEach, describe, expect, test } from 'vitest'
+import { afterEach, beforeEach, describe, expect, test } from 'vitest'
 
-import { createServer } from '../../../../../src/server.js'
+import { startServer } from '../../../../../src/api/server.js'
 
 describe('health probe', () => {
   let server
 
   const setupServer = async () => {
-    server = await createServer()
+    server = await startServer()
 
     await server.start()
   }
 
   describe('GET /health', () => {
-    beforeEach(async () => {
-      await setupServer()
-    })
-
-    test('when called, should return 200 OK with success message', async () => {
-      const response = await server.inject({
-        method: 'GET',
-        url: '/health'
+    describe('given the service is healthy', () => {
+      beforeEach(async () => {
+        await setupServer()
       })
 
-      expect(response.statusCode).toBe(200)
-      expect(response.result).toEqual({ message: 'success' })
+      test('should return 200 OK with success message', async () => {
+        const response = await server.inject({
+          method: 'GET',
+          url: '/health'
+        })
+
+        expect(response.statusCode).toBe(200)
+        expect(response.result).toEqual({ message: 'success' })
+      })
+
+      afterEach(async () => {
+        await server.stop()
+      })
     })
   })
 })

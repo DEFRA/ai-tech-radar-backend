@@ -1,11 +1,13 @@
-import { vi, describe, test, expect, beforeAll } from 'vitest'
+import { beforeEach, describe, expect, test, vi } from 'vitest'
 
-import { config } from '../../../../../src/config/index.js'
-import { createLogger } from '../../../../../src/logging/logger.js'
-import { createServer } from '../../../../../src/server.js'
-import { startServer } from '../../../../../src/api/common/helpers/start-server.js'
+import { createLogger } from '../../../src/common/logging/logger.js'
+import { config } from '../../../src/config/index.js'
 
-vi.mock('../../../../../src/logging/logger.js', () => ({
+import hapi from '@hapi/hapi'
+
+import { startServer } from '../../../src/api/server.js'
+
+vi.mock('../../../src/common/logging/logger.js', () => ({
   createLogger: vi.fn().mockReturnValue({
     info: vi.fn(),
     warn: vi.fn(),
@@ -13,30 +15,35 @@ vi.mock('../../../../../src/logging/logger.js', () => ({
   })
 }))
 
-vi.mock('../../../../../src/server.js', () => ({
-  createServer: vi.fn()
-}))
+vi.mock('@hapi/hapi', () => {
+  return {
+    default: {
+      server: vi.fn()
+    }
+  }
+})
 
 const mockLogger = createLogger()
 
 const mockServer = {
   start: vi.fn(),
   stop: vi.fn(),
+  register: vi.fn(),
   logger: mockLogger
 }
 
-describe('#startServer', () => {
-  beforeAll(async () => {
+describe('startServer', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+
     config.set('port', 3098)
 
-    createServer.mockResolvedValue(mockServer)
+    hapi.server.mockReturnValue(mockServer)
   })
 
   describe('When server starts', () => {
     test('Should start up server as expected', async () => {
       await startServer()
-
-      expect(createServer).toHaveBeenCalled()
 
       expect(mockLogger.info).toHaveBeenNthCalledWith(
         1,
@@ -50,16 +57,16 @@ describe('#startServer', () => {
   })
 
   describe('When server start fails', () => {
-    beforeAll(() => {
-      createServer.mockRejectedValue(Error('Server failed to start'))
-    })
-
     test('Should log failed startup message', async () => {
+      mockServer.start.mockRejectedValue(
+        new Error('Server failed to start')
+      )
+
       await startServer()
 
       expect(mockLogger.info).toHaveBeenCalledWith('Server failed to start :(')
       expect(mockLogger.error).toHaveBeenCalledWith(
-        Error('Server failed to start')
+        new Error('Server failed to start')
       )
     })
   })

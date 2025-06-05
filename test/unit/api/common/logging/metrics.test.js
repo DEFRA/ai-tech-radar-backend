@@ -1,10 +1,9 @@
-import { vi, describe, test, expect, beforeEach } from 'vitest'
+import { StorageResolution, Unit, createMetricsLogger } from 'aws-embedded-metrics'
+import { beforeEach, describe, expect, test, vi } from 'vitest'
 
+import { createLogger } from '../../../../../src/common/logging/logger.js'
+import { metricsCounter } from '../../../../../src/common/logging/metrics.js'
 import { config } from '../../../../../src/config/index.js'
-
-import { createLogger } from '../../../../../src/logging/logger.js'
-import { createMetricsLogger, StorageResolution, Unit } from 'aws-embedded-metrics'
-import { metricsCounter } from '../../../../../src/api/common/helpers/metrics.js'
 
 vi.mock('aws-embedded-metrics', async (originalImport) => {
   const actual = await originalImport()
@@ -18,7 +17,7 @@ vi.mock('aws-embedded-metrics', async (originalImport) => {
   }
 })
 
-vi.mock('../../../../../src/logging/logger.js', () => ({
+vi.mock('../../../../../src/common/logging/logger.js', () => ({
   createLogger: vi.fn().mockReturnValue({
     info: vi.fn(),
     warn: vi.fn(),
@@ -33,7 +32,7 @@ const mockMetricsName = 'mock-metrics-name'
 const defaultMetricsValue = 1
 const mockValue = 200
 
-describe('#metrics', () => {
+describe('metrics', () => {
   describe('When metrics is not enabled', () => {
     beforeEach(async () => {
       config.set('isMetricsEnabled', false)
