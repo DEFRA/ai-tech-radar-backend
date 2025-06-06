@@ -24,7 +24,7 @@ Core delivery platform Node.js Backend Template.
 
 ### Node.js
 
-Please install [Node.js](http://nodejs.org/) `>= v18` and [npm](https://nodejs.org/) `>= v9`. You will find it
+Please install [Node.js](http://nodejs.org/) `>= v22` and [npm](https://nodejs.org/) `>= v9`. You will find it
 easier to use the Node Version Manager [nvm](https://github.com/creationix/nvm)
 
 To use the correct version of Node.js for this application, via nvm:
@@ -87,24 +87,6 @@ If you are having issues with formatting of line breaks on Windows update your g
 git config --global core.autocrlf false
 ```
 
-## API endpoints
-
-| Endpoint             | Description                    |
-| :------------------- | :----------------------------- |
-| `GET: /health`       | Health                         |
-| `GET: /example    `  | Example API (remove as needed) |
-| `GET: /example/<id>` | Example API (remove as needed) |
-
-## Calling API endpoints
-
-### Postman
-
-A [Postman](https://www.postman.com/) collection and environment are available for making calls to the ai-tech-radar-backend API.
-Simply import the collection and environment into Postman.
-
-- [CDP Node Backend Template Postman Collection](postman/ai-tech-radar-backend.postman_collection.json)
-- [CDP Node Backend Template Postman Environment](postman/ai-tech-radar-backend.postman_environment.json)
-
 ## Development helpers
 
 ### MongoDB Locks
@@ -163,7 +145,7 @@ docker build --target development --no-cache --tag ai-tech-radar-backend:develop
 Run:
 
 ```bash
-docker run -e PORT=3001 -p 3001:3001 ai-tech-radar-backend:development
+docker run -e PORT=3000 -p 3000:3000 ai-tech-radar-backend:development
 ```
 
 ### Production image
@@ -177,7 +159,7 @@ docker build --no-cache --tag ai-tech-radar-backend .
 Run:
 
 ```bash
-docker run -e PORT=3001 -p 3001:3001 ai-tech-radar-backend
+docker run -e PORT=3000 -p 3000:3000 ai-tech-radar-backend
 ```
 
 ### Docker Compose
