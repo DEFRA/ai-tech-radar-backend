@@ -1,0 +1,21 @@
+services:
+  ai-tech-radar-backend:
+    build:
+      target: development
+    image: ai-tech-radar-backend-development
+    container_name: ai-tech-radar-backend-test
+    command: npm run test
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      PORT: 3000
+      NODE_ENV: development
+      MONGO_URI: mongodb://mongodb:27017/
+    volumes:
+      - ./src/:/home/node/src
+      - ./test/:/home/node/test
+      - ./package.json:/home/node/package.json
+      - ./coverage:/home/node/coverage
+    networks:
+      - ai-tech-radar

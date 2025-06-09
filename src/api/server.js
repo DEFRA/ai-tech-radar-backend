@@ -1,24 +1,22 @@
-import path from 'path'
 import hapi from '@hapi/hapi'
+import path from 'path'
 
-import { config } from '~/src/config/index.js'
-import { router } from '~/src/api/router.js'
-import { requestLogger } from '~/src/helpers/logging/request-logger.js'
-import { mongoDb } from '~/src/helpers/mongodb.js'
-import { failAction } from '~/src/helpers/fail-action.js'
-import { secureContext } from '~/src/helpers/secure-context/index.js'
+import { createLogger } from '../common/logging/logger.js'
+import { config } from '../config/index.js'
+import { pulse } from './plugins/pulse.js'
+import { requestLogger } from './plugins/request-logger.js'
+import { requestTracing } from './plugins/request-tracing.js'
 
-const isProduction = config.get('isProduction')
+import { probes as probesRouter } from './probes/probes.js'
 
-async function createServer() {
+async function createServer () {
   const server = hapi.server({
     port: config.get('port'),
     routes: {
       validate: {
         options: {
           abortEarly: false
-        },
-        failAction
+        }
       },
       files: {
         relativeTo: path.resolve(config.get('root'), '.public')
@@ -39,17 +37,36 @@ async function createServer() {
     }
   })
 
-  await server.register(requestLogger)
-
-  if (isProduction) {
-    await server.register(secureContext)
-  }
-
-  // The mongoDb plugin adds access to mongo by adding `db` to the server and request object.
-  // Also adds an instance of mongoClient to just the server object.
-  await server.register([mongoDb, router])
+  await server.register([
+    requestLogger,
+    requestTracing,
+    pulse,
+    probesRouter
+  ])
 
   return server
 }
 
-export { createServer }
+async function startServer () {
+  let server
+
+  try {
+    server = await createServer()
+    await server.start()
+
+    server.logger.info('Server started successfully')
+    server.logger.info(
+      `Access your backend on http://localhost:${config.get('port')}`
+    )
+  } catch (error) {
+    const logger = createLogger()
+    logger.info('Server failed to start :(')
+    logger.error(error)
+  }
+
+  return server
+}
+
+export {
+  startServer
+}
