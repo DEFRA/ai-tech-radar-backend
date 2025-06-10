@@ -1,0 +1,115 @@
+openapi: 3.1.1
+info:
+  title: AI Tech Radar API
+  version: 1.0.0
+  description: A RESTful API to support the AI Tech Radar.
+paths:
+  /v1/radar:
+    get:
+      summary: Get the AI Tech Radar
+      description: Retrieve the items currently on the AI Tech Radar.
+      tags:
+        - Radar Overview
+      responses:
+        '200':
+          description: Responds with a list of items from the AI Tech Radar.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RadarItem'
+                required:
+                  - items
+        '404':
+          description: Radar not found.
+        '500':
+          description: Internal server error.
+  /v1/radar/items:
+    post:
+      summary: Add an item to the AI Tech Radar
+      description: Add a new item to the AI Tech Radar.
+      tags:
+        - Radar Management
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  $ref: '#/components/schemas/RadarTitle'
+                quadrant:
+                  $ref: '#/components/schemas/RadarQuadrant'
+                status:
+                  $ref: '#/components/schemas/RadarStatus'
+              required:
+                - title
+                - quadrant
+                - status
+      responses:
+        '201':
+          description: Item successfully added to the radar.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RadarItem'
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    description: An array of validation issues with the payload.
+                    items:
+                      type: string
+                      example: "Title is required."
+                    minItems: 1
+        '500':
+          description: Internal server error.
+components:
+  schemas:
+    RadarItem:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/RadarId'
+        title:
+          $ref: '#/components/schemas/RadarTitle'
+        quadrant:
+          $ref: '#/components/schemas/RadarQuadrant'
+        status:
+          $ref: '#/components/schemas/RadarStatus'
+      required:
+        - id
+        - title
+        - quadrant
+        - status
+    RadarId:
+      type: string
+      description: Unique identifier for the radar item.
+    RadarTitle:
+      type: string
+      description: Title of the radar item.
+      example: "LangGraph"
+      minLength: 1
+      maxLength: 255
+    RadarQuadrant:
+      type: string
+      description: Quadrant the radar item is in.
+      example: "Technology"
+      minLength: 1
+      maxLength: 55
+    RadarStatus:
+      type: string
+      description: Status of the radar item.
+      example: "Adopt"
+      minLength: 1
+      maxLength: 55
