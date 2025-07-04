@@ -8,6 +8,7 @@ import { requestLogger } from './plugins/request-logger.js'
 import { requestTracing } from './plugins/request-tracing.js'
 
 import { probes as probesRouter } from './probes/probes.js'
+import { v1 } from './v1/v1.js'
 
 async function createServer () {
   const server = hapi.server({
@@ -41,7 +42,8 @@ async function createServer () {
     requestLogger,
     requestTracing,
     pulse,
-    probesRouter
+    probesRouter,
+    v1
   ])
 
   return server
