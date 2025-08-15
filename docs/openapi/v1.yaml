@@ -104,22 +104,14 @@ components:
     RadarQuadrant:
       type: string
       description: Quadrant the radar item is in.
-      # Defines a constraint that limits valid values to only these four specific strings
-      # Makes the API reject any request containing a quadrant value not in this list
-      # Tells API consumers that only these four values are valid inputs
-      # Will be used for validation by any client or server implementing this spec
-      enum: ["Techniques", "Tools", "Platforms", "Frameworks"]
-      # Provides a sample value for documentation purposes
-      # Helps API consumers understand what a valid value looks like
-      # Is displayed in API documentation tools like Swagger UI
-      # Doesn't affect validation, just serves as documentation
-      example: "Frameworks"
+      enum: ["techniques", "tools", "platforms", "frameworks"]
+      example: "frameworks"
       minLength: 1
       maxLength: 55
     RadarStatus:
       type: string
       description: Status of the radar item.
-      enum: ["ADOPT", "TRIAL", "ASSESS", "HOLD"]
-      example: "ADOPT"
+      enum: ["adopt", "trial", "assess", "hold"]
+      example: "adopt"
       minLength: 1
       maxLength: 55
