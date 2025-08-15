@@ -28,7 +28,7 @@ const router = {
         path: '/v1/radar/items',
         options: {
           validate: {
-            failAction (request, h, err) {
+            failAction (_request, h, err) {
               const errors = err.details.map(e => {
                 return e.message
               })
