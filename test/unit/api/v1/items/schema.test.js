@@ -89,7 +89,56 @@ describe('add item schema tests', () => {
       // assert
       expect(error).toBeDefined()
       expect(error.details).toContainEqual(expect.objectContaining({
-        message: 'quadrant must be one of: Techniques, Tools, Platforms, Frameworks'
+        message: '"quadrant" must be one of [techniques, tools, platforms, frameworks]'
+      }))
+    })
+  })
+
+  describe('status validaton', () => {
+    test.each([
+      'adopt',
+      'trial',
+      'assess',
+      'hold'
+    ])('should accept %s as a valid status', (status) => {
+      // arrange
+      const payload = {
+        title: 'New AI tool',
+        quadrant: 'tools',
+        status
+      }
+
+      // act
+      const { value, error } = addItemSchema.validate(payload, {
+        abortEarly: false
+      })
+
+      // assert
+      expect(error).toBeUndefined()
+      expect(value).toEqual({
+        title: 'New AI tool',
+        quadrant: 'tools',
+        status
+      })
+    })
+
+    test('should return error for invalid status', () => {
+      // arrange
+      const payload = {
+        title: 'New AI tool',
+        quadrant: 'tools',
+        status: 'Invalid'
+      }
+
+      // act 
+      const { error } = addItemSchema.validate(payload, {
+        abortEarly: false
+      })
+
+      // assert
+      expect(error).toBeDefined()
+      expect(error.details).toContainEqual(expect.objectContaining({
+        message: '"status" must be one of [adopt, trial, assess, hold]'
       }))
     })
   })
