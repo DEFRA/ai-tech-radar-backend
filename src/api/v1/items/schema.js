@@ -4,8 +4,8 @@ const addItemSchema = Joi.object({
   title: Joi.string().required(),
   quadrant: Joi.string()
     .valid('techniques', 'tools', 'platforms', 'frameworks')
-    .required() 
-    .messages({ 
+    .required()
+    .messages({
       'any.only': 'quadrant must be one of: Techniques, Tools, Platforms, Frameworks'
     }),
   status: Joi.string()
@@ -19,6 +19,7 @@ const addItemSchema = Joi.object({
   .messages({
     'object.base': '"{#label}" must be of type object'
   })
-  
 
-export { addItemSchema }
+export {
+  addItemSchema
+}

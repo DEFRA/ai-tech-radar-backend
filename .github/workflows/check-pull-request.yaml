@@ -34,9 +34,7 @@ jobs:
           docker build --no-cache --tag ai-tech-radar-backend .
           exit $?
 
-#      - name: SonarCloud Scan
-#        if: github.actor != 'dependabot[bot]'
-#        uses: SonarSource/sonarcloud-github-action@master
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: SonarQubeScan
+        uses: SonarSource/sonarqube-scan-action@v4
+        env: 
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
