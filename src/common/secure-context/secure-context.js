@@ -28,13 +28,13 @@ function createCustomSecureContext (options = {}) {
     logger.warn('Could not find any TRUSTSTORE_ certificates')
   }
 
-  const context = tls.createSecureContext(options)
+  const secureContext = tls.createSecureContext(options)
 
   for (const cert of trustStoreCerts) {
-    context.addCACert(cert)
+    secureContext.context.addCACert(cert)
   }
 
-  return context
+  return secureContext
 }
 
 function getSecureContext () {
