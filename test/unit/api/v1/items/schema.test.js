@@ -130,7 +130,7 @@ describe('add item schema tests', () => {
         status: 'Invalid'
       }
 
-      // act 
+      // act
       const { error } = addItemSchema.validate(payload, {
         abortEarly: false
       })
