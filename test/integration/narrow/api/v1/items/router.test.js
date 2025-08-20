@@ -1,14 +1,16 @@
-import { beforeAll, describe, expect, test } from 'vitest'
+import { afterEach, beforeEach, describe, expect, test } from 'vitest'
 
 import { startServer } from '../../../../../../src/api/server.js'
 
 describe('items v1 api', () => {
   let server
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     server = await startServer()
+  })
 
-    await server.start()
+  afterEach(async () => {
+    await server.stop()
   })
 
   describe('given POST /v1/radar/items is called', () => {
@@ -35,7 +37,7 @@ describe('items v1 api', () => {
     })
 
     describe('when the request is invalid', () => {
-      test('the return 400 bad request with error', async () => {
+      test('then return 400 bad request with error', async () => {
         const payload = {
           title: '',
           quadrant: '',

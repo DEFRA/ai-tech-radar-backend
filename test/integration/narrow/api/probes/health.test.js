@@ -7,8 +7,6 @@ describe('health probe', () => {
 
   const setupServer = async () => {
     server = await startServer()
-
-    await server.start()
   }
 
   describe('GET /health', () => {
