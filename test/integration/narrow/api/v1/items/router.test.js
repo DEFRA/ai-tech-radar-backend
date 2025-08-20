@@ -1,22 +1,18 @@
-import { afterEach, beforeEach, describe, expect, test } from 'vitest'
+import { beforeAll, describe, expect, test } from 'vitest'
 
 import { startServer } from '../../../../../../src/api/server.js'
 
 describe('items v1 api', () => {
   let server
 
-  const setupServer = async () => {
+  beforeAll(async () => {
     server = await startServer()
 
     await server.start()
-  }
+  })
 
   describe('given POST /v1/radar/items is called', () => {
     describe('when the request is valid', () => {
-      beforeEach(async () => {
-        await setupServer()
-      })
-
       test('then return 201 created with the created item', async () => {
         const payload = {
           title: 'New AI Tool',
@@ -36,9 +32,24 @@ describe('items v1 api', () => {
         expect(response.result.quadrant).toBe(payload.quadrant)
         expect(response.result.status).toBe(payload.status)
       })
+    })
 
-      afterEach(async () => {
-        await server.stop()
+    describe('when the request is invalid', () => {
+      test('the return 400 bad request with error', async () => {
+        const payload = {
+          title: '',
+          quadrant: '',
+          status: '',
+        }
+
+        const response = await server.inject({
+          method: 'POST',
+          url: '/v1/radar/items',
+          payload
+        })
+
+        expect(response.statusCode).toBe(400)
+        expect(response.result.message).toBe('"title" is not allowed to be empty, "quadrant" must be one of [techniques, tools, platforms, frameworks], "quadrant" is not allowed to be empty, "status" must be one of [adopt, trial, assess, hold], "status" is not allowed to be empty')
       })
     })
   })
