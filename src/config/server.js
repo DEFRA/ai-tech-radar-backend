@@ -31,7 +31,7 @@ const serverConfig = {
   serviceName: {
     doc: 'Api Service Name',
     format: String,
-    default: 'fcp-sfd-accelerator'
+    default: 'ai-tech-radar-backend'
   },
   root: {
     doc: 'Project root',
@@ -75,7 +75,7 @@ const serverConfig = {
     databaseName: {
       doc: 'Database name for mongodb',
       format: String,
-      default: 'fcp-sfd-accelerator',
+      default: 'ai-tech-radar-backend',
       env: 'MONGO_DATABASE'
     }
   },

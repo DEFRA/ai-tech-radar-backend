@@ -104,12 +104,14 @@ components:
     RadarQuadrant:
       type: string
       description: Quadrant the radar item is in.
-      example: "Technology"
+      enum: ["techniques", "tools", "platforms", "frameworks"]
+      example: "frameworks"
       minLength: 1
       maxLength: 55
     RadarStatus:
       type: string
       description: Status of the radar item.
-      example: "Adopt"
+      enum: ["adopt", "trial", "assess", "hold"]
+      example: "adopt"
       minLength: 1
       maxLength: 55

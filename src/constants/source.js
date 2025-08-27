@@ -1,4 +1,4 @@
-const SOURCE = 'fcp-sfd-accelerator'
+const SOURCE = 'ai-tech-radar-backend'
 
 export {
   SOURCE
