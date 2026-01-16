@@ -1,5 +1,6 @@
 import process from 'node:process'
 
+import { databaseClient } from './common/database/mongo.js' // eslint-disable-line
 import { startServer } from './api/server.js'
 import { createLogger } from './common/logging/logger.js'
 import { setupProxy } from './common/proxy/setup-proxy.js'
